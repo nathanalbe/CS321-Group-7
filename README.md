@@ -18,15 +18,21 @@ This repository is organized to follow a clean Maven-based Java project structur
         - `gmu`
           - `cs321`
             - `App.java`
-            - `Immigrant.java`
             - `Dependent.java`
+            - `Immigrant.java`
+            - `Petition.java`
+            - `Screen.java`
+            - `Status.java`
   - `test`
     - `java`
       - `edu`
         - `gmu`
           - `cs321`
-            - `ImmigrantTest.java`
             - `DependentTest.java`
+            - `ImmigrantTest.java`
+            - `PetitionTest.java`
+            - `ScreenTest.java`
+            - `StatusTest.java`
 - `.vscode/` – VSCode project settings
 - `.gitignore` – Files/folders to ignore in Git
 - `.gitattributes` – Normalizes line endings and encoding
@@ -34,10 +40,16 @@ This repository is organized to follow a clean Maven-based Java project structur
 - `pom.xml` – Maven configuration file
   
 #### ✅ Key Files:
-- `Immigrant.java`: Contains the domain logic for immigrant data and method stubs for create, update, and get operations.
 - `Dependent.java`: Contains the domain logic for dependent data and inherits method stubs for create, update, and get operations from Immigrant.
-- `ImmigrantTest.java`: Contains JUnit tests that follow the TDD approach.
+- `Immigrant.java`: Contains the domain logic for immigrant data and method stubs for create, update, and get operations.
+- `Petition.java`: Contains the domain logic for petition data and method stubs for create, update, and get operations.
+- `Screen.java`: Contains the domain logic for the screen and method stubs for display.
+- `Status.java`: Contains the domain logic for Status data and method stubs for update, get, and send operations.
 - `DependentTest.java`: Contains JUnit tests that follow the TDD approach.
+- `ImmigrantTest.java`: Contains JUnit tests that follow the TDD approach.
+- `PetitionTest.java`: Contains JUnit tests that follow the TDD approach.
+- `ScreenTest.java`: Contains JUnit tests that follow the TDD approach.
+- `StatusTest.java`: Contains JUnit tests that follow the TDD approach.
 - `.gitignore`, `.gitattributes`: Project hygiene and version control rules.
 - `README.md`: Project and repository documentation.
 - `pom.xml`: Maven configuration file (build automation, dependencies, etc.)
