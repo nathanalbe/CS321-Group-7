@@ -14,9 +14,15 @@ public class Petition {
         this.status = status;
     }
 
-    public boolean createPetition() { return false; }
+    public Petition createPetition(String petitionID, String petitionerID, String submissionDate, String status) { return new Petition(petitionID, petitionerID, submissionDate, status); }
 
-    public boolean updatePetitionID(String newPetitionID) { return false; }
+    public void updatePetitionID(String newPetitionID) { this.petitionID = newPetitionID; }
 
-    public boolean getPetitionerID() { return false; }
+    public String getPetitionID() { return petitionID; }
+    
+    public String getPetitionerID() { return petitionerID; }
+
+    public String getSubmissionDate() { return submissionDate; }
+
+    public String getStatus() { return status; }
 }
