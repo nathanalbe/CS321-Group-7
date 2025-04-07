@@ -50,7 +50,7 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-public class Login extends Application {
+public class ReviewUI extends Application {
 
     @Override
     public void start(Stage primaryStage) {
