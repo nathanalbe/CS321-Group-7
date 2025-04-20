@@ -45,6 +45,13 @@
       <artifactId>javafx-fxml</artifactId>
       <version>17.0.2</version>
     </dependency>
+    <dependency>
+      <groupId>com.cs321</groupId>
+      <artifactId>workflow</artifactId>
+      <version>1.0-SNAPSHOT</version>
+      <scope>system</scope>
+      <systemPath>${project.basedir}/lib/workflow-1.0-SNAPSHOT-jar-with-dependencies.jar</systemPath>
+    </dependency>
   </dependencies>
 
   <build>

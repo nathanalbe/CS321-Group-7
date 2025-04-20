@@ -13,14 +13,19 @@ public class PetitionUI extends Application {
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Petition for Fiancé(e) and Children");
 
-        // === Form Fields ===
+        // === Fiancé(e) Section ===
         Label titleLabel = new Label("Fiancé(e) Information");
         titleLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
 
-        TextField fianceNameField = new TextField();
-        fianceNameField.setPromptText("Full Name");
+        TextField fianceFirstNameField = new TextField();
+        fianceFirstNameField.setPromptText("First Name");
+
+        TextField fianceLastNameField = new TextField();
+        fianceLastNameField.setPromptText("Last Name");
 
         DatePicker fianceDOBPicker = new DatePicker();
+        fianceDOBPicker.setPromptText("Date of Birth");
+
         ComboBox<String> nationalityBox = new ComboBox<>();
         nationalityBox.setPromptText("Select Nationality");
         nationalityBox.getItems().addAll("Ethiopia", "USA", "Canada", "Other");
@@ -37,26 +42,55 @@ public class PetitionUI extends Application {
             DatePicker childDOB = new DatePicker();
             childDOB.setPromptText("Child DOB");
 
-            VBox childBox = new VBox(2, childName, childDOB);
+            ComboBox<String> relationshipBox = new ComboBox<>();
+            relationshipBox.setPromptText("Relationship");
+            relationshipBox.getItems().add("Child");
+
+            VBox childBox = new VBox(5, childName, childDOB, relationshipBox);
+            childBox.setPadding(new Insets(5));
             childBox.setStyle("-fx-border-color: #ccc; -fx-padding: 5;");
             childrenList.getChildren().add(childBox);
         });
 
         // === Action Buttons ===
         Button saveButton = new Button("Save Draft");
-        Button nextButton = new Button("Next");
+        Button nextButton = new Button("Submit Petition");
         Button cancelButton = new Button("Cancel");
 
         nextButton.setOnAction(e -> {
-            if (fianceNameField.getText().isEmpty() || fianceDOBPicker.getValue() == null) {
-                showAlert("Validation Error", "Please fill out the required fiancé(e) fields.");
+            // === Validation for Fiancé(e) ===
+            if (fianceFirstNameField.getText().isEmpty() ||
+                fianceLastNameField.getText().isEmpty() ||
+                fianceDOBPicker.getValue() == null ||
+                nationalityBox.getValue() == null) {
+                showAlert("Validation Error", "Please complete all required Fiancé(e) fields.");
                 return;
             }
-            System.out.println("Form submitted.");
+
+            // === Validation for each child block (if any) ===
+            for (var childNode : childrenList.getChildren()) {
+                if (childNode instanceof VBox childBox) {
+                    TextField nameField = (TextField) childBox.getChildren().get(0);
+                    DatePicker dobPicker = (DatePicker) childBox.getChildren().get(1);
+                    ComboBox<String> relationshipBox = (ComboBox<String>) childBox.getChildren().get(2);
+
+                    if (nameField.getText().isEmpty() ||
+                        dobPicker.getValue() == null ||
+                        relationshipBox.getValue() == null) {
+                        showAlert("Validation Error", "Please complete all required fields for each child.");
+                        return;
+                    }
+                }
+            }
+
+            // Placeholder for successful submission logic
+            System.out.println("Petition submitted successfully.");
+            showAlert("Success", "Petition submitted successfully.");
         });
 
         cancelButton.setOnAction(e -> {
-            fianceNameField.clear();
+            fianceFirstNameField.clear();
+            fianceLastNameField.clear();
             fianceDOBPicker.setValue(null);
             nationalityBox.getSelectionModel().clearSelection();
             childrenList.getChildren().clear();
@@ -68,7 +102,8 @@ public class PetitionUI extends Application {
         // === Layout ===
         VBox formLayout = new VBox(10,
                 titleLabel,
-                fianceNameField,
+                fianceFirstNameField,
+                fianceLastNameField,
                 fianceDOBPicker,
                 nationalityBox,
                 childrenLabel,
@@ -79,19 +114,20 @@ public class PetitionUI extends Application {
         formLayout.setPadding(new Insets(20));
         ScrollPane scrollPane = new ScrollPane(formLayout);
 
-        Scene scene = new Scene(scrollPane, 500, 600);
+        Scene scene = new Scene(scrollPane, 520, 640);
         primaryStage.setScene(scene);
         primaryStage.show();
     }
 
     private void showAlert(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);
+        alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
     }
 
     public static void main(String[] args) {
-        Application.launch(args);
+        launch(args);
     }
 }
