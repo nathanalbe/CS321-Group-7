@@ -6,6 +6,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+
 import com.cs321.Workflow;
 
 public class PetitionUI extends Application {
@@ -143,6 +145,8 @@ public class PetitionUI extends Application {
         ScrollPane scrollPane = new ScrollPane(formLayout);
 
         Scene scene = new Scene(scrollPane, 520, 640);
+        primaryStage.initStyle(StageStyle.DECORATED);
+        primaryStage.setResizable(true);
         primaryStage.setScene(scene);
         primaryStage.show();
     }

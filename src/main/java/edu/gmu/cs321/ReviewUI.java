@@ -161,6 +161,13 @@ public class ReviewUI extends Application {
         grid.add(Spacer03, 0, 17, 2, 2);
 
         Button denialButton = new Button("<");
+        denialButton.setOnAction(e -> {
+            try {
+                new PetitionUI().start(primaryStage);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        });
         grid.add(denialButton, 0, 18);
 
         Button saveButton = new Button("save");
