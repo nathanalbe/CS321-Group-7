@@ -89,6 +89,16 @@ public class PetitionUI extends Application {
             }
 
             // === Simulate petition submission to database ===
+            
+            // database connection and insertion logic would go here
+            Immigrant testUser = new Immigrant(fianceFirstNameField.getText(), fianceLastNameField.getText(), fianceDOBPicker.getValue().toString(), "123 Main St", "@gmail.com");
+            int userID = testUser.createImmigrant();
+            System.out.println("User ID: " + userID);
+            if (userID == 0) {
+                showAlert("Database Error","Error failed to add to database and create immigrant");
+            }
+
+            // Workflow simulation
             // In a real system, this would return a generated petition ID from the database
             int generatedPetitionId = (int) (Math.random() * 10000) + 1000;
 
