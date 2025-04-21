@@ -6,6 +6,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
+import com.cs321.Workflow;
 
 public class PetitionUI extends Application {
 
@@ -83,9 +84,27 @@ public class PetitionUI extends Application {
                 }
             }
 
-            // Placeholder for successful submission logic
-            System.out.println("Petition submitted successfully.");
-            showAlert("Success", "Petition submitted successfully.");
+            // === Simulate petition submission to database ===
+            // In a real system, this would return a generated petition ID from the database
+            int generatedPetitionId = (int) (Math.random() * 10000) + 1000;
+
+            // === Add to Workflow ===
+            try {
+                Workflow workflow = new Workflow();
+                int result = workflow.AddWFItem(generatedPetitionId, "Review");
+
+                if (result == 0) {
+                    showAlert("Success", "Petition submitted and added to workflow for review.");
+                    System.out.println("Workflow: Petition " + generatedPetitionId + " added to 'Review' queue.");
+                } else {
+                    showAlert("Workflow Error", "Failed to add to workflow. Code: " + result);
+                }
+
+                workflow.closeConnection();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                showAlert("Error", "Unexpected error while adding to workflow.");
+            }
         });
 
         cancelButton.setOnAction(e -> {
