@@ -2,6 +2,7 @@ package edu.gmu.cs321;
 
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class PetitionTest {
@@ -11,18 +12,18 @@ public class PetitionTest {
         // Test the creation of a Petition
         // Test the Petition Constructor works correctly
         String petitionID = "P0123456";
-        String petitionerID = "U9876543";
+        int petitionerID = 9876543;
         String submissionDate = "030525";
         String status = "processing";
         Petition entry = new Petition(petitionID, petitionerID, submissionDate, status);
 
         // Check a valid petition creation
-        boolean result = entry.createPetition();
+        boolean result = entry.createPetition(petitionID, petitionerID, submissionDate, status);
         assertTrue(result);
 
         // Check an invalid petition creation
-        entry = new Petition("", "", "", "");
-        result = entry.createPetition();
+        entry = new Petition("", 0, "", "");
+        result = entry.createPetition("", 0, "", "");
         assertTrue(result);
     }
 
@@ -30,7 +31,7 @@ public class PetitionTest {
     public void testUpdatePetitionID() {
         // Test the updatePetitionID method
         String petitionID = "P0123456";
-        String petitionerID = "U9876543";
+        int petitionerID = 9876543;
         String submissionDate = "030525";
         String status = "processing";
         Petition entry = new Petition(petitionID, petitionerID, submissionDate, status);
@@ -48,15 +49,15 @@ public class PetitionTest {
     public void testGetPetitionerID() {
         // Test the getPetitionerID method
         String petitionID = "P0123456";
-        String petitionerID = "U9876543";
+        int petitionerID = 9876543;
         String submissionDate = "030525";
         String status = "processing";
         Petition entry = new Petition(petitionID, petitionerID, submissionDate, status);
 
         // Check a valid petitioner ID retrieval
-        boolean result = entry.getPetitionerID();
+        int result = entry.getPetitionerID();
 
         // Check an invalid petitioner ID retrieval
-        result = entry.getPetitionerID();
+        assertEquals(result, petitionerID);
     }
 }

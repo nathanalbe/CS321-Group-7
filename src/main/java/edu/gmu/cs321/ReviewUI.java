@@ -29,7 +29,6 @@ package edu.gmu.cs321;/*
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-//package login;
 
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -69,8 +68,11 @@ public class ReviewUI extends Application {
 
         //OBJECT CREATION (MIGHT NOT USE)
         Immigrant immigrant = new Immigrant(name, birthdate, address, email);
-        Petition petition = new Petition(petitionID, petitionerID, submissionDate, status);
+        Petition petition = new Petition(petitionID, immigrant.getUserID(), submissionDate, status);
 
+        //--------------------------------------------------------------------------------//
+        //                          Viewing Page                                 //                                                                 //
+        //--------------------------------------------------------------------------------//
 
         primaryStage.setTitle("Petition Review");
         GridPane grid = new GridPane();
@@ -79,21 +81,31 @@ public class ReviewUI extends Application {
         grid.setVgap(10);
         grid.setPadding(new Insets(25, 25, 25, 25));
 
+
+        //Button editButton = new Button()
+
+        // Page Title
         Text scenetitle = new Text("Petition for Alien Fiancé(e) and Children");
         scenetitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
         grid.add(scenetitle, 0, 1, 2, 1);
 
-        // IMMIGRANT INFORMATION
+
+        //--------------------------------------------------------------------------------//
+        //                          IMMIGRANT INFORMATION                                 //                                                                 //
+        //--------------------------------------------------------------------------------//
+
 
         Label Spacer01 = new Label("");
         grid.add(Spacer01, 0, 2, 2, 2);
 
         Label immigrantTitle = new Label("---- Immigrant (Petitioner) Information ----");
+        //immigrantTitle.setFont();
         grid.add(immigrantTitle, 0, 3, 2, 2);
+
 
         Label immigrantNameTitle = new Label("Name:");
         grid.add(immigrantNameTitle, 0, 5);
-        Label immigrantName = new Label(name);
+        TextField immigrantName = new TextField(name);
         grid.add(immigrantName, 1, 5);
 
         Label immigrantBDTitle = new Label("Birthdate:");
@@ -111,7 +123,11 @@ public class ReviewUI extends Application {
         Label immigrantEmail = new Label(email);
         grid.add(immigrantEmail, 1, 8);
 
-        // PETITION INFORMATION
+
+        //--------------------------------------------------------------------------------//
+        //                          PETITION INFORMATION                                  //                                                                 //
+        //--------------------------------------------------------------------------------//
+
 
         Label Spacer02 = new Label("");
         grid.add(Spacer02, 0, 9, 2, 2);
@@ -139,6 +155,9 @@ public class ReviewUI extends Application {
         Label statusAns = new Label(status);
         grid.add(statusAns, 1, 16);
 
+        //--------------------------------------------------------------------------------//
+        //                                 Editing Page                                   //                                                                 //
+        //--------------------------------------------------------------------------------//
 
 
         /*

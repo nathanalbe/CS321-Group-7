@@ -11,7 +11,7 @@ public class StatusTest {
         // Test the creation of a Petition
         // Test the Petition Constructor works correctly
         String petitionID = "123-456-789";
-        String petitionerID = "987-654-321";
+        int petitionerID = 987654321;
         String submissionDate = "01-01-2000";
         String status = "pending";
         Petition petition = new Petition(petitionID, petitionerID, submissionDate, status);
@@ -31,7 +31,7 @@ public class StatusTest {
         // Test the creation of a Petition
         // Test the Petition Constructor works correctly
         String petitionID = "123-456-789";
-        String petitionerID = "987-654-321";
+        int petitionerID = 987654321;
         String submissionDate = "01-01-2000";
         String status = "pending";
         Petition petition = new Petition(petitionID, petitionerID, submissionDate, status);
@@ -51,7 +51,7 @@ public class StatusTest {
         // Test the creation of a Petition
         // Test the Petition Constructor works correctly
         String petitionID = "123-456-789";
-        String petitionerID = "987-654-321";
+        int petitionerID = 987654321;
         String submissionDate = "01-01-2000";
         String status = "pending";
         Petition petition = new Petition(petitionID, petitionerID, submissionDate, status);

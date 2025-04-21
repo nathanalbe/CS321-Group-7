@@ -31,4 +31,43 @@ public class Immigrant {
     public Immigrant getImmigrantByID(int userID) {
         return null;  // placeholder
     }
+
+    //--------------------------------------------------------------------------------//
+    //                                  SETTERS                                       //
+    //--------------------------------------------------------------------------------//
+
+    // Changes the immigrants userID
+    public void setUserID(int newUserID) { this.userID = newUserID; }
+
+    // Updates the immigrant's name
+    public void setName(String newName) { this.name = newName; }
+
+    // Updates the immigrant's recorded birthdate
+    public void setBirthdate(String newBirthdate) { this.birthdate = newBirthdate; }
+
+    // Updates the immigrant's address of residence
+    public void setAddress(String newAddress) { this.address = newAddress; }
+
+    // Updates the immigrant's email
+    public void setEmail(String newEmail) { this.email = newEmail; }
+
+
+    //--------------------------------------------------------------------------------//
+    //                                  GETTERS                                       //
+    //--------------------------------------------------------------------------------//
+
+    // Return the ID number assigned to the immigrant
+    public int getUserID() { return userID; }
+
+    // Return the immigrant's recorded name
+    public String getName() { return name; }
+
+    // Return the immigrant's birthdate
+    public String getBirthdate() { return birthdate; }
+
+    // Return the immigrant's address
+    public String getAddress() { return address; }
+
+    // Returns the immigrant's email
+    public String getEmail() { return email; }
 }
