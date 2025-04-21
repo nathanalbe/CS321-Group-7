@@ -9,9 +9,11 @@ import javafx.stage.Stage;
 import com.cs321.Workflow;
 
 public class PetitionUI extends Application {
+    private Stage primaryStage;
 
     @Override
     public void start(Stage primaryStage) {
+        this.primaryStage = primaryStage;
         primaryStage.setTitle("Petition for Fiancé(e) and Children");
 
         // === Fiancé(e) Section ===
@@ -104,6 +106,13 @@ public class PetitionUI extends Application {
             } catch (Exception ex) {
                 ex.printStackTrace();
                 showAlert("Error", "Unexpected error while adding to workflow.");
+            }
+            // Go to next screen (Review)
+            try {
+                new ReviewUI().start(primaryStage);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                showAlert("Navigation Error", "Cannot open review screen.");
             }
         });
 

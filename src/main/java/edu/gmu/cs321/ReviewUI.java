@@ -50,6 +50,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class ReviewUI extends Application {
+    private Stage primaryStage;
 
     @Override
     public void start(Stage primaryStage) {
@@ -70,7 +71,7 @@ public class ReviewUI extends Application {
         Immigrant immigrant = new Immigrant(name, birthdate, address, email);
         Petition petition = new Petition(petitionID, immigrant.getUserID(), submissionDate, status);
 
-
+        this.primaryStage = primaryStage;
         primaryStage.setTitle("Petition Review");
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
@@ -166,6 +167,13 @@ public class ReviewUI extends Application {
         grid.add(saveButton, 1, 18);
 
         Button approvalButton = new Button("Approval");
+        approvalButton.setOnAction(e -> {
+            try {
+                new ApprovalUI().start(primaryStage);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        });
         grid.add(approvalButton, 2, 18);
 
 
