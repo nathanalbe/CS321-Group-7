@@ -70,9 +70,6 @@ public class ReviewUI extends Application {
         Immigrant immigrant = new Immigrant(name, birthdate, address, email);
         Petition petition = new Petition(petitionID, immigrant.getUserID(), submissionDate, status);
 
-        //--------------------------------------------------------------------------------//
-        //                          Viewing Page                                 //                                                                 //
-        //--------------------------------------------------------------------------------//
 
         primaryStage.setTitle("Petition Review");
         GridPane grid = new GridPane();
@@ -82,8 +79,6 @@ public class ReviewUI extends Application {
         grid.setPadding(new Insets(25, 25, 25, 25));
 
 
-        //Button editButton = new Button()
-
         // Page Title
         Text scenetitle = new Text("Petition for Alien Fiancé(e) and Children");
         scenetitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
@@ -91,7 +86,7 @@ public class ReviewUI extends Application {
 
 
         //--------------------------------------------------------------------------------//
-        //                          IMMIGRANT INFORMATION                                 //                                                                 //
+        //                          IMMIGRANT INFORMATION                                 //
         //--------------------------------------------------------------------------------//
 
 
@@ -110,22 +105,22 @@ public class ReviewUI extends Application {
 
         Label immigrantBDTitle = new Label("Birthdate:");
         grid.add(immigrantBDTitle, 0, 6);
-        Label immigrantBD = new Label(birthdate);
+        TextField immigrantBD = new TextField(birthdate);
         grid.add(immigrantBD, 1, 6);
 
         Label immigrantAddressTitle = new Label("Address:");
         grid.add(immigrantAddressTitle, 0, 7);
-        Label immigrantAddress = new Label(address);
+        TextField immigrantAddress = new TextField(address);
         grid.add(immigrantAddress, 1, 7);
 
         Label immigrantEmailTitle = new Label("Email:");
         grid.add(immigrantEmailTitle, 0, 8);
-        Label immigrantEmail = new Label(email);
+        TextField immigrantEmail = new TextField(email);
         grid.add(immigrantEmail, 1, 8);
 
 
         //--------------------------------------------------------------------------------//
-        //                          PETITION INFORMATION                                  //                                                                 //
+        //                          PETITION INFORMATION                                  //
         //--------------------------------------------------------------------------------//
 
 
@@ -137,62 +132,42 @@ public class ReviewUI extends Application {
 
         Label petitionIDTitle = new Label("PetitionID:");
         grid.add(petitionIDTitle, 0, 13);
-        Label petitionIDAns = new Label(petitionID);
+        TextField petitionIDAns = new TextField(petitionID);
         grid.add(petitionIDAns, 1, 13);
 
         Label petitionerIDTitle = new Label("PetitionerID:");
         grid.add(petitionerIDTitle, 0, 14);
-        Label petitionerIDAns = new Label(petitionerID);
+        TextField petitionerIDAns = new TextField(petitionerID);
         grid.add(petitionerIDAns, 1, 14);
 
         Label submissionDateTitle = new Label("Submission Date:");
         grid.add(submissionDateTitle, 0, 15);
-        Label submissionDateAns = new Label(submissionDate);
+        TextField submissionDateAns = new TextField(submissionDate);
         grid.add(submissionDateAns, 1, 15);
 
         Label statusTitle = new Label("Status:");
         grid.add(statusTitle, 0, 16);
-        Label statusAns = new Label(status);
+        TextField statusAns = new TextField(status);
         grid.add(statusAns, 1, 16);
 
+
         //--------------------------------------------------------------------------------//
-        //                                 Editing Page                                   //                                                                 //
+        //                                    Buttons                                     //
         //--------------------------------------------------------------------------------//
 
 
-        /*
-        TextField userTextField = new TextField();
-        grid.add(userTextField, 1, 1);
+        Label Spacer03 = new Label("");
+        grid.add(Spacer03, 0, 17, 2, 2);
 
-        PasswordField pwBox = new PasswordField();
-        grid.add(pwBox, 1, 2);
-        */
+        Button denialButton = new Button("<");
+        grid.add(denialButton, 0, 18);
 
+        Button saveButton = new Button("save");
+        grid.add(saveButton, 1, 18);
 
-        // BUTTONS
+        Button approvalButton = new Button("Approval");
+        grid.add(approvalButton, 2, 18);
 
-        /*
-        Button btn = new Button("Sign in");
-        HBox hbBtn = new HBox(10);
-        hbBtn.setAlignment(Pos.BOTTOM_RIGHT);
-        hbBtn.getChildren().add(btn);
-        grid.add(hbBtn, 0, 1);
-
-        final Text actiontarget = new Text();
-        grid.add(actiontarget, 0, 6);
-        grid.setColumnSpan(actiontarget, 2);
-        grid.setHalignment(actiontarget, RIGHT);
-        actiontarget.setId("actiontarget");
-
-        btn.setOnAction(new EventHandler<ActionEvent>() {
-
-            @Override
-            public void handle(ActionEvent e) {
-                actiontarget.setFill(Color.FIREBRICK);
-                actiontarget.setText("Sign in button pressed");
-            }
-        });
-        */
 
         Scene scene = new Scene(grid, 500, 700);
         primaryStage.setScene(scene);
