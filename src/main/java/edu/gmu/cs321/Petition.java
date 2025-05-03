@@ -1,25 +1,46 @@
 package edu.gmu.cs321;
 
+import java.sql.*; 
+
 public class Petition {
 
-    private String petitionID; // Identification number/code assigned to the petition
+    private int petitionID; // Identification number/code assigned to the petition
     private int petitionerID; // Identification number/code assigned to the immigrant petitioner
     private String submissionDate; // Date petition was submitted
     private String status; // Current status of the petition
 
-    public Petition(String petitionID, int petitionerID, String submissionDate, String status) {
-        this.petitionID = petitionID;
+    public Petition(int petitionerID, String submissionDate, String status) {
         this.petitionerID = petitionerID;
         this.submissionDate = submissionDate;
         this.status = status;
     }
 
-    public boolean createPetition(String petitionID, int petitionerID, String submissionDate, String status) {
-        Petition newPetition = new Petition(petitionID, petitionerID, submissionDate, status);
-        return true;
+    public boolean createPetition() {
+        String insertQuery = "insert into petition (userID, status) values (?,?)";
+        int petitionID = 0;
+        try {
+            Connection connection = DB_Connection.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(insertQuery, Statement.RETURN_GENERATED_KEYS);
+            preparedStatement.setInt(1, petitionerID);
+            preparedStatement.setString(2, status);
+            int rowsAffected = preparedStatement.executeUpdate();
+            if (rowsAffected > 0) {
+                System.out.println("petition added successfully.");
+                ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
+                if (generatedKeys.next()) {
+                    petitionID = generatedKeys.getInt(1);
+                    System.out.println("Generated ID: " + petitionID);
+                }
+            } else {
+                System.out.println("Error adding petition.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return petitionID != 0; // placeholder for TDD
     }
 
-    public boolean updatePetitionID(String newPetitionID) {
+    public boolean updatePetitionID(int newPetitionID) {
         this.petitionID = newPetitionID;
         return true;
     }
@@ -47,7 +68,7 @@ public class Petition {
     //--------------------------------------------------------------------------------//
 
     // Returns the petition ID as a string
-    public String getPetitionID() { return petitionID; }
+    public int getPetitionID() { return petitionID; }
 
     // Returns the petitioner ID as a string
     public int getPetitionerID() { return petitionerID; }
