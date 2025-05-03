@@ -49,8 +49,8 @@ public class ApprovalUI extends Application {
 
         // Dummy data using your Petition class. Make sure your Petition class has appropriate getters.
         ObservableList<Petition> petitionList = FXCollections.observableArrayList(
-                new Petition("P00112233", 928375014, "03/01/2025", "SUBMITTED"),
-                new Petition("P00112234", 498175705, "03/05/2025", "SUBMITTED")
+                new Petition(928375014, "03/01/2025", "SUBMITTED"),
+                new Petition( 498175705, "03/05/2025", "SUBMITTED")
         );
         table.setItems(petitionList);
 
