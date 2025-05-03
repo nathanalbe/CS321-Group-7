@@ -88,9 +88,10 @@ public class PetitionUI extends Application {
                 }
             }
 
-            // === Simulate petition submission to database ===
-            
+            // === petition submission to database ===
             // database connection and insertion logic would go here
+
+            // Create Dependent and add to database
             Immigrant testUser = new Immigrant(fianceFirstNameField.getText(), fianceLastNameField.getText(), fianceDOBPicker.getValue().toString(), "123 Main St", "@gmail.com");
             int userID = testUser.createImmigrant();
             System.out.println("User ID: " + userID);
@@ -98,18 +99,22 @@ public class PetitionUI extends Application {
                 showAlert("Database Error","Error failed to add to database and create immigrant");
             }
 
-            // Workflow simulation
-            // In a real system, this would return a generated petition ID from the database
-            int generatedPetitionId = (int) (Math.random() * 10000) + 1000;
+            // Create Petition and add to database
+            Petition petition = new Petition(userID, null, "Pending");
+            if (!petition.createPetition()) {
+                showAlert("Database Error", "Failed to create petition.");
+                return;
+            }
 
-            // === Add to Workflow ===
+            // Workflow 
+            // === Add to Workflow database ===
             try {
                 Workflow workflow = new Workflow();
-                int result = workflow.AddWFItem(generatedPetitionId, "Review");
+                int result = workflow.AddWFItem(petition.getPetitionID(), "Review");
 
                 if (result == 0) {
                     showAlert("Success", "Petition submitted and added to workflow for review.");
-                    System.out.println("Workflow: Petition " + generatedPetitionId + " added to 'Review' queue.");
+                    System.out.println("Workflow: Petition " + petition.getPetitionID() + " added to 'Review' queue.");
                 } else {
                     showAlert("Workflow Error", "Failed to add to workflow. Code: " + result);
                 }
