@@ -69,7 +69,7 @@ public class ReviewUI extends Application {
 
         //OBJECT CREATION (MIGHT NOT USE)
         Immigrant immigrant = new Immigrant(name, birthdate, address, email);
-        Petition petition = new Petition(petitionID, immigrant.getUserID(), submissionDate, status);
+        Petition petition = new Petition(immigrant.getUserID(), submissionDate, status);
 
         this.primaryStage = primaryStage;
         primaryStage.setTitle("Petition Review");
