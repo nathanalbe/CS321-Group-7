@@ -88,9 +88,10 @@ public class PetitionUI extends Application {
                 }
             }
 
-            // === Simulate petition submission to database ===
-            
+            // === petition submission to database ===
             // database connection and insertion logic would go here
+
+            // Create Dependent and add to database
             Immigrant testUser = new Immigrant(fianceFirstNameField.getText(), fianceLastNameField.getText(), fianceDOBPicker.getValue().toString(), "123 Main St", "@gmail.com");
             int userID = testUser.createImmigrant();
             System.out.println("User ID: " + userID);
@@ -98,7 +99,7 @@ public class PetitionUI extends Application {
                 showAlert("Database Error","Error failed to add to database and create immigrant");
             }
 
-            // Create Petition
+            // Create Petition and add to database
             Petition petition = new Petition(userID, null, "Pending");
             if (!petition.createPetition()) {
                 showAlert("Database Error", "Failed to create petition.");
@@ -106,7 +107,7 @@ public class PetitionUI extends Application {
             }
 
             // Workflow 
-            // === Add to Workflow ===
+            // === Add to Workflow database ===
             try {
                 Workflow workflow = new Workflow();
                 int result = workflow.AddWFItem(petition.getPetitionID(), "Review");
