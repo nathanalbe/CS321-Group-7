@@ -50,7 +50,7 @@ public class Petition {
     //--------------------------------------------------------------------------------//
 
     // Updates the petition ID to the new inputted one
-    public void setPetitionID(String newPetitionID) { this.petitionID = newPetitionID; }
+    public void setPetitionID(int newPetitionID) { this.petitionID = newPetitionID; }
 
     // Updates the petitioner ID to the new inputted one
     public void setPetitionerID(int newPetitionerID) { this.petitionerID = newPetitionerID; }
