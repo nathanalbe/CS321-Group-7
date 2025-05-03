@@ -88,7 +88,7 @@ public class PetitionUI extends Application {
                 }
             }
 
-            // === petition submission to database ===
+            // === Petition submission to database ===
             // database connection and insertion logic would go here
 
             // Create Dependent and add to database
