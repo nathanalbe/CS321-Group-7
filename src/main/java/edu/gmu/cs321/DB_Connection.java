@@ -7,10 +7,10 @@ public class DB_Connection {
     // loads from .env by default
     private static final Dotenv dotenv = Dotenv.load();
 
-    private static final String DB_URL = "jdbc:mysql://localhost:3306/CS321";
-    private static final String DB_USER = "root";
-    private static final String DB_PASSWORD = dotenv.get("DB_PASSWORD"); // Replace with your actual password
-
+    private static final String DB_URL = "jdbc:mysql://group7-database.ct6ykmewqiyj.us-east-2.rds.amazonaws.com:3306/cs321?allowPublicKeyRetrieval=true&useSSL=false";
+    private static final String DB_USER = "admin";
+    private static final String DB_PASSWORD = dotenv.get("DB_PASSWORD");
+    
     // JDBC variables for opening and managing connection
     private static Connection connection = null;
     private static Statement statement = null;
