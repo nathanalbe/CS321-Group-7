@@ -26,6 +26,14 @@ public class Immigrant {
         this(firstName, lastName, dob, address, "", "");
     }
 
+    public Immigrant(String first_name, String last_name, String birthdate, String address, String email) {
+        this.first_name = first_name;
+        this.last_name = last_name;
+        this.birthdate = birthdate;
+        this.address = address;
+        this.email = email;
+    }
+
      // Create new immigrant instance (will return false for now)
      public int createImmigrant() {
         String insertQuery = "insert into immigrant (first_name, last_name, birthdate, address, email, password) values (?,?,?,?,?,?)";
