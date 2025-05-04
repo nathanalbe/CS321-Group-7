@@ -140,7 +140,7 @@ public class SignupUI {
                 } else if (email.toLowerCase().contains("@approver.com")) {
                     new ApprovalUI().start(stage);
                 } else {
-                    new PetitionUI().start(stage);
+                    new LoginUI().createLoginScene(stage);
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();

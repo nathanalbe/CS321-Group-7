@@ -102,7 +102,7 @@ public class PetitionUI extends Application {
             int userID = immigrant.getUserID();
 
             // Create Petition and add to database
-            Petition petition = new Petition(userID, null, "Pending");
+            Petition petition = new Petition(userID, null, "Review");
             int petitionID = petition.createPetition();
             if (petitionID == 0) {
                 showAlert("Database Error", "Failed to create petition.");
@@ -121,13 +121,6 @@ public class PetitionUI extends Application {
                     TextField firstNameField = (TextField) childBox.getChildren().get(0);
                     TextField lastNameField = (TextField) childBox.getChildren().get(1);
                     DatePicker dobPicker = (DatePicker) childBox.getChildren().get(2);
-            
-                    if (firstNameField.getText().isEmpty() ||
-                        lastNameField.getText().isEmpty() ||
-                        dobPicker.getValue() == null) {
-                        showAlert("Validation Error", "Please complete all fields for each child.");
-                        return;
-                    }
 
                     Dependent child = new Dependent(firstNameField.getText(), lastNameField.getText(), dobPicker.getValue().toString(), "Child");
                     child.createDependent(petitionID);
@@ -138,11 +131,11 @@ public class PetitionUI extends Application {
             // === Add to Workflow database ===
             try {
                 Workflow workflow = new Workflow();
-                int result = workflow.AddWFItem(petition.getPetitionID(), "Review");
+                int result = workflow.AddWFItem(petitionID, "Review");
 
                 if (result == 0) {
                     showAlert("Success", "Petition submitted and added to workflow for review.");
-                    System.out.println("Workflow: Petition " + petition.getPetitionID() + " added to 'Review' queue.");
+                    System.out.println("Workflow: Petition " + petitionID + " added to 'Review' queue.");
                 } else {
                     showAlert("Workflow Error", "Failed to add to workflow. Code: " + result);
                 }
@@ -152,9 +145,9 @@ public class PetitionUI extends Application {
                 ex.printStackTrace();
                 showAlert("Error", "Unexpected error while adding to workflow.");
             }
-            // Go to next screen (Review)
+            // Go to back to dashboard screen
             try {
-                new ReviewUI().start(primaryStage);
+                new DashboardUI().start(primaryStage);
             } catch (Exception ex) {
                 ex.printStackTrace();
                 showAlert("Navigation Error", "Cannot open review screen.");
