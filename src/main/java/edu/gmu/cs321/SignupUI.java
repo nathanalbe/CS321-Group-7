@@ -102,11 +102,11 @@ public class SignupUI {
                     return;
                 }
 
-                String fullAddress = addressField.getText().trim();
+                String address = addressField.getText().trim();
 
-                // Pattern: "123 Main St, Fairfax, USA"
-                if (!fullAddress.matches("^\\d+\\s+.+?,\\s*[A-Za-z ]{2,},\\s*[A-Za-z ]{2,}$")) {
-                    showAlert("Invalid Address", "Enter full address like: 123 Main St, Fairfax, USA");
+                // Pattern: "123 Main St, Fairfax, VA"
+                if (!address.matches("^\\d+\\s+([a-zA-Z]+\\s?)+,\\s*([a-zA-Z]+\\s?)+,\\s*[A-Z]{2}$")) {
+                    showAlert("Validation Error", "Please enter a valid address in the format: '123 Main St, Fairfax, VA'");
                     return;
                 }
 

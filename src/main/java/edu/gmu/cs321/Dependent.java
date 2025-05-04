@@ -16,16 +16,17 @@ public class Dependent extends Immigrant{
         this.relationship = relationship;
     }
 
-    public int createDependent() {
+    public int createDependent(int petitionID) {
         String insertQuery = "insert into dependent (petition_id, first_name, last_name, birthdate, relationship) values (?,?,?,?,?)";
         int userID = 0;
         try {
             Connection connection = DB_Connection.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(insertQuery, Statement.RETURN_GENERATED_KEYS);
-            preparedStatement.setString(1, first_name);
-            preparedStatement.setString(2, last_name);
-            preparedStatement.setString(3, birthdate);
-            preparedStatement.setString(4, relationship);
+            preparedStatement.setInt(1, petitionID);
+            preparedStatement.setString(2, first_name);
+            preparedStatement.setString(3, last_name);
+            preparedStatement.setString(4, birthdate);
+            preparedStatement.setString(5, relationship);
             int rowsAffected = preparedStatement.executeUpdate();
             if (rowsAffected > 0) {
                 System.out.println("Dependent added successfully.");
