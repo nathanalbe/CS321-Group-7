@@ -10,23 +10,25 @@ public class Immigrant {
     private String birthdate;
     private String address;
     private String email;
+    private String password;
 
     
-    public Immigrant(String first_name, String last_name, String birthdate, String address, String email) {
+    public Immigrant(String first_name, String last_name, String birthdate, String address, String email, String password) {
         this.first_name = first_name;
         this.last_name = last_name;
         this.birthdate = birthdate;
         this.address = address;
         this.email = email;
+        this.password = password;
     }
 
     public Immigrant(String firstName, String lastName, String dob, String address) {
-        this(firstName, lastName, dob, address, "");
+        this(firstName, lastName, dob, address, "", "");
     }
 
      // Create new immigrant instance (will return false for now)
      public int createImmigrant() {
-        String insertQuery = "insert into immigrant (first_name, last_name, birthdate, address, email) values (?,?,?,?,?)";
+        String insertQuery = "insert into immigrant (first_name, last_name, birthdate, address, email, password) values (?,?,?,?,?,?)";
         int userID = 0;
         try {
             Connection connection = DB_Connection.getConnection();
@@ -36,6 +38,7 @@ public class Immigrant {
             preparedStatement.setString(3, birthdate);
             preparedStatement.setString(4, address);
             preparedStatement.setString(5, email);
+            preparedStatement.setString(6, password);
             int rowsAffected = preparedStatement.executeUpdate();
             if (rowsAffected > 0) {
                 System.out.println("Immigrant added successfully.");

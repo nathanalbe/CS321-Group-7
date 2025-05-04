@@ -92,9 +92,8 @@ public class PetitionUI extends Application {
             // database connection and insertion logic would go here
 
             // Create Dependent and add to database
-            Immigrant testUser = new Immigrant(fianceFirstNameField.getText(), fianceLastNameField.getText(), fianceDOBPicker.getValue().toString(), "123 Main St", "@gmail.com");
-            int userID = testUser.createImmigrant();
-            System.out.println("User ID: " + userID);
+            Dependent dependent = new Dependent(fianceFirstNameField.getText(), fianceLastNameField.getText(), fianceDOBPicker.getValue().toString(), "fiance");
+            int userID = dependent.createDependent();
             if (userID == 0) {
                 showAlert("Database Error","Error failed to add to database and create immigrant");
             }
@@ -160,9 +159,8 @@ public class PetitionUI extends Application {
         ScrollPane scrollPane = new ScrollPane(formLayout);
 
         Scene scene = new Scene(scrollPane, 520, 640);
-        primaryStage.initStyle(StageStyle.DECORATED);
-        primaryStage.setResizable(true);
         primaryStage.setScene(scene);
+        primaryStage.setResizable(true);
         primaryStage.show();
     }
 
