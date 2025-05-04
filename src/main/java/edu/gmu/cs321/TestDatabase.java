@@ -1,12 +1,14 @@
 package edu.gmu.cs321;
 
 import java.sql.*;
+import io.github.cdimascio.dotenv.Dotenv;
 
 public class TestDatabase {
+    private static final Dotenv dotenv = Dotenv.load();
     // JDBC URL, username, and password of MySQL server
-    private static final String URL = "jdbc:mysql://localhost:3306/cs321";
-    private static final String USER = "root";
-    private static final String PASSWORD = ""; // replace with your MySQL password
+    private static final String URL = "jdbc:mysql://group7-database.ct6ykmewqiyj.us-east-2.rds.amazonaws.com:3306/cs321?allowPublicKeyRetrieval=true&useSSL=false";
+    private static final String USER = "admin";
+    private static final String PASSWORD = dotenv.get("DB_PASSWORD");
 
     // JDBC variables for opening, closing connection and statement
     private static Connection connection;
