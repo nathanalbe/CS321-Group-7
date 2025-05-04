@@ -121,10 +121,10 @@ public class SignupUI {
             String userType = (!email.contains("reviewer") && !email.contains("approver")) ? "Immigrant" : (email.contains("reviewer") ? "Reviewer" : "Approver");
 
             if (userType.equals("Reviewer")) {
-                Reviewer reviewer = new Reviewer(firstNameField.getText(), lastNameField.getText(), emailField.getText());
+                Reviewer reviewer = new Reviewer(firstNameField.getText(), lastNameField.getText(), emailField.getText(), passwordField.getText());
                 reviewer.createReviewer();
             } else if (userType.equals("Approver")) {
-                Approver approver = new Approver(firstNameField.getText(), lastNameField.getText(), emailField.getText());
+                Approver approver = new Approver(firstNameField.getText(), lastNameField.getText(), emailField.getText(), passwordField.getText());
                 approver.createApprover();
             }
 

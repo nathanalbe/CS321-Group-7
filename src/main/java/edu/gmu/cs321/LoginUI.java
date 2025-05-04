@@ -37,11 +37,40 @@ public class LoginUI {
             showAlert("Login Failed", "Please enter email and password.");
             return;
         }
-
+    
+        String role = "";
+        String query = "";
         if (email.toLowerCase().contains("@reviewer.com")) {
-            new ReviewUI().start(stage);
+            role = "reviewers";
+            query = "SELECT * FROM reviewers WHERE email = ? AND password = ?";
+        } else if (email.toLowerCase().contains("@approver.com")) {
+            role = "approvers";
+            query = "SELECT * FROM approvers WHERE email = ? AND password = ?";
         } else {
-            new PetitionUI().start(stage);
+            role = "immigrant";
+            query = "SELECT * FROM immigrant WHERE email = ? AND password = ?";
+        }
+    
+        try (var conn = DB_Connection.getConnection();
+             var stmt = conn.prepareStatement(query)) {
+    
+            stmt.setString(1, email);
+            stmt.setString(2, password);
+    
+            var rs = stmt.executeQuery();
+            if (rs.next()) {
+                // Login successful
+                switch (role) {
+                    case "reviewers" -> new ReviewUI().start(stage);
+                    case "approvers" -> new ApprovalUI().start(stage);
+                    default -> new PetitionUI().start(stage);
+                }
+            } else {
+                showAlert("Login Failed", "Invalid email or password.");
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            showAlert("Error", "Something went wrong while connecting to the database.");
         }
     }
 
