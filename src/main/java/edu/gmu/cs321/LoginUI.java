@@ -63,7 +63,20 @@ public class LoginUI {
                 switch (role) {
                     case "reviewers" -> new ReviewUI().start(stage);
                     case "approvers" -> new ApprovalUI().start(stage);
-                    default -> new PetitionUI().start(stage);
+                    default -> {
+                        // Create and store the logged-in Immigrant
+                        Immigrant immigrant = new Immigrant(
+                            rs.getString("first_name"),
+                            rs.getString("last_name"),
+                            rs.getString("birthdate"),
+                            rs.getString("address"),
+                            rs.getString("email")
+                        );
+                        immigrant.setUserID(rs.getInt("userID"));
+                        Session.setCurrentImmigrant(immigrant);
+        
+                        new PetitionUI().start(stage);
+                    }
                 }
             } else {
                 showAlert("Login Failed", "Invalid email or password.");

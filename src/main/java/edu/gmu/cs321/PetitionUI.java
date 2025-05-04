@@ -31,9 +31,8 @@ public class PetitionUI extends Application {
         DatePicker fianceDOBPicker = new DatePicker();
         fianceDOBPicker.setPromptText("Date of Birth");
 
-        ComboBox<String> nationalityBox = new ComboBox<>();
-        nationalityBox.setPromptText("Select Nationality");
-        nationalityBox.getItems().addAll("Ethiopia", "USA", "Canada", "Other");
+        TextField countryField = new TextField();
+        countryField.setPromptText("Enter Country");
 
         // === Children Section ===
         Label childrenLabel = new Label("Children (Optional):");
@@ -41,17 +40,16 @@ public class PetitionUI extends Application {
         Button addChildButton = new Button("Add Child");
 
         addChildButton.setOnAction(e -> {
-            TextField childName = new TextField();
-            childName.setPromptText("Child Name");
+            TextField childFirstName = new TextField();
+            childFirstName.setPromptText("Child First Name");
+
+            TextField childLastName = new TextField();
+            childLastName.setPromptText("Child Last Name");
 
             DatePicker childDOB = new DatePicker();
             childDOB.setPromptText("Child DOB");
 
-            ComboBox<String> relationshipBox = new ComboBox<>();
-            relationshipBox.setPromptText("Relationship");
-            relationshipBox.getItems().add("Child");
-
-            VBox childBox = new VBox(5, childName, childDOB, relationshipBox);
+            VBox childBox = new VBox(5, childFirstName, childLastName, childDOB);
             childBox.setPadding(new Insets(5));
             childBox.setStyle("-fx-border-color: #ccc; -fx-padding: 5;");
             childrenList.getChildren().add(childBox);
@@ -66,43 +64,74 @@ public class PetitionUI extends Application {
             // === Validation for Fiancé(e) ===
             if (fianceFirstNameField.getText().isEmpty() ||
                 fianceLastNameField.getText().isEmpty() ||
-                fianceDOBPicker.getValue() == null ||
-                nationalityBox.getValue() == null) {
+                fianceDOBPicker.getValue() == null) {
                 showAlert("Validation Error", "Please complete all required Fiancé(e) fields.");
                 return;
             }
 
+            String country = countryField.getText().trim();
+            if (!country.matches("^[a-zA-Z\\s\\-]{2,50}$")) {
+                showAlert("Validation Error", "Please enter a valid country name (letters, spaces, and dashes only).");
+                return;
+            }
+
+            
+
             // === Validation for each child block (if any) ===
             for (var childNode : childrenList.getChildren()) {
                 if (childNode instanceof VBox childBox) {
-                    TextField nameField = (TextField) childBox.getChildren().get(0);
-                    DatePicker dobPicker = (DatePicker) childBox.getChildren().get(1);
-                    ComboBox<String> relationshipBox = (ComboBox<String>) childBox.getChildren().get(2);
-
-                    if (nameField.getText().isEmpty() ||
-                        dobPicker.getValue() == null ||
-                        relationshipBox.getValue() == null) {
-                        showAlert("Validation Error", "Please complete all required fields for each child.");
+                    TextField firstNameField = (TextField) childBox.getChildren().get(0);
+                    TextField lastNameField = (TextField) childBox.getChildren().get(1);
+                    DatePicker dobPicker = (DatePicker) childBox.getChildren().get(2);
+            
+                    if (firstNameField.getText().isEmpty() ||
+                        lastNameField.getText().isEmpty() ||
+                        dobPicker.getValue() == null) {
+                        showAlert("Validation Error", "Please complete all fields for each child.");
                         return;
                     }
                 }
             }
+            
 
             // === Petition submission to database ===
             // database connection and insertion logic would go here
 
-            // Create Dependent and add to database
-            Dependent dependent = new Dependent(fianceFirstNameField.getText(), fianceLastNameField.getText(), fianceDOBPicker.getValue().toString(), "fiance");
-            int userID = dependent.createDependent();
-            if (userID == 0) {
-                showAlert("Database Error","Error failed to add to database and create immigrant");
-            }
+            // Logged in immigrant
+            Immigrant immigrant = Session.getCurrentImmigrant();
+            int userID = immigrant.getUserID();
 
             // Create Petition and add to database
             Petition petition = new Petition(userID, null, "Pending");
-            if (!petition.createPetition()) {
+            int petitionID = petition.createPetition();
+            if (petitionID == 0) {
                 showAlert("Database Error", "Failed to create petition.");
                 return;
+            }
+
+            // Create Dependent and add to database
+            Dependent dependent = new Dependent(fianceFirstNameField.getText(), fianceLastNameField.getText(), fianceDOBPicker.getValue().toString(), "Fiancé(e)");
+            int depID = dependent.createDependent(petitionID);
+            if (depID == 0) {
+                showAlert("Database Error", "Failed to add dependent to the database.");
+            }
+
+            for (var childNode : childrenList.getChildren()) {
+                if (childNode instanceof VBox childBox) {
+                    TextField firstNameField = (TextField) childBox.getChildren().get(0);
+                    TextField lastNameField = (TextField) childBox.getChildren().get(1);
+                    DatePicker dobPicker = (DatePicker) childBox.getChildren().get(2);
+            
+                    if (firstNameField.getText().isEmpty() ||
+                        lastNameField.getText().isEmpty() ||
+                        dobPicker.getValue() == null) {
+                        showAlert("Validation Error", "Please complete all fields for each child.");
+                        return;
+                    }
+
+                    Dependent child = new Dependent(firstNameField.getText(), lastNameField.getText(), dobPicker.getValue().toString(), "Child");
+                    child.createDependent(petitionID);
+                }
             }
 
             // Workflow 
@@ -136,7 +165,7 @@ public class PetitionUI extends Application {
             fianceFirstNameField.clear();
             fianceLastNameField.clear();
             fianceDOBPicker.setValue(null);
-            nationalityBox.getSelectionModel().clearSelection();
+            countryField.clear();
             childrenList.getChildren().clear();
         });
 
@@ -149,7 +178,7 @@ public class PetitionUI extends Application {
                 fianceFirstNameField,
                 fianceLastNameField,
                 fianceDOBPicker,
-                nationalityBox,
+                countryField,
                 childrenLabel,
                 childrenList,
                 addChildButton,

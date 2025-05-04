@@ -17,8 +17,8 @@ public class Petition {
     }
 
     // function to create a new petition in the database
-    // Returns true if the petition was created successfully, false otherwise
-    public boolean createPetition() {
+    // Returns the petitionID of the newly created petition, or 0 if creation failed  
+    public int createPetition() {
         String insertQuery = "insert into petition (userID, status) values (?,?)";
         int petitionID = 0;
         try {
@@ -40,7 +40,7 @@ public class Petition {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return petitionID != 0; // placeholder for TDD
+        return petitionID; // placeholder for TDD
     }
 
     // function to update a petition in the database
