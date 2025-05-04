@@ -113,7 +113,7 @@ public class PetitionUI extends Application {
             Dependent dependent = new Dependent(fianceFirstNameField.getText(), fianceLastNameField.getText(), fianceDOBPicker.getValue().toString(), "Fiancé(e)");
             int depID = dependent.createDependent(petitionID);
             if (depID == 0) {
-                showAlert("Database Error","Error failed to add to database and create immigrant");
+                showAlert("Database Error", "Failed to add dependent to the database.");
             }
 
             for (var childNode : childrenList.getChildren()) {
@@ -165,7 +165,7 @@ public class PetitionUI extends Application {
             fianceFirstNameField.clear();
             fianceLastNameField.clear();
             fianceDOBPicker.setValue(null);
-            countryField.clear();;
+            countryField.clear();
             childrenList.getChildren().clear();
         });
 

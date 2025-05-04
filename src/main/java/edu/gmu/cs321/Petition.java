@@ -17,7 +17,7 @@ public class Petition {
     }
 
     // function to create a new petition in the database
-    // Returns true if the petition was created successfully, false otherwise
+    // Returns the petitionID of the newly created petition, or 0 if creation failed  
     public int createPetition() {
         String insertQuery = "insert into petition (userID, status) values (?,?)";
         int petitionID = 0;
