@@ -68,7 +68,7 @@ public class ReviewUI extends Application {
         String status = "SUBMITTED";
 
         //OBJECT CREATION (MIGHT NOT USE)
-        Immigrant immigrant = new Immigrant(name, birthdate, address, email);
+        Immigrant immigrant = new Immigrant(firstName, lastName, birthdate, address, email);
         Petition petition = new Petition(immigrant.getUserID(), submissionDate, status);
 
         this.primaryStage = primaryStage;
