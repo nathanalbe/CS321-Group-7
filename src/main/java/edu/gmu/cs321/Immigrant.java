@@ -91,8 +91,14 @@ public class Immigrant {
     // Return the ID number assigned to the immigrant
     public int getUserID() { return userID; }
 
+    // Returns the immigrant's first name
+    public String getFirst_name() { return first_name; }
+
+    // Returns the immigrant's last name
+    public String getLast_name() { return last_name; }
+
     // Return the immigrant's recorded name
-    public String getName() { return first_name + last_name; }
+    public String getName() { return first_name + " " + last_name; }
 
     // Return the immigrant's birthdate
     public String getBirthdate() { return birthdate; }
