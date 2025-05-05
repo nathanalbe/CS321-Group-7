@@ -56,9 +56,8 @@ public class PetitionUI extends Application {
         });
 
         // === Action Buttons ===
-        Button saveButton = new Button("Save Draft");
         Button nextButton = new Button("Submit Petition");
-        Button cancelButton = new Button("Cancel");
+        Button backButton = new Button("Back");
 
         nextButton.setOnAction(e -> {
             // === Validation for Fiancé(e) ===
@@ -154,15 +153,22 @@ public class PetitionUI extends Application {
             }
         });
 
-        cancelButton.setOnAction(e -> {
+        backButton.setOnAction(e -> {
             fianceFirstNameField.clear();
             fianceLastNameField.clear();
             fianceDOBPicker.setValue(null);
             countryField.clear();
             childrenList.getChildren().clear();
+
+            try {
+                new DashboardUI().start(primaryStage);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                showAlert("Navigation Error", "Cannot open review screen.");
+            }
         });
 
-        HBox buttonRow = new HBox(10, saveButton, nextButton, cancelButton);
+        HBox buttonRow = new HBox(10, nextButton, backButton);
         buttonRow.setPadding(new Insets(10, 0, 0, 0));
 
         // === Layout ===
