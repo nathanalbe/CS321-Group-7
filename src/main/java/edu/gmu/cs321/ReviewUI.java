@@ -43,48 +43,34 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+import java.sql.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class ReviewUI extends Application {
-    private Stage primaryStage;
 
     @Override
     public void start(Stage primaryStage) {
 
         AtomicInteger modCount = new AtomicInteger();
 
-
         // IMMIGRANT VARIABLES
-        String firstName = "Joel";
-        String lastName = "Ballard";
-        String birthdate = "03/05/1994";
-        String address = "12345 Nowhere Lane";
-        String email = "JoelBall.email.com";
+        String firstName = "";
+        String lastName = "";
+        String birthdate = "";
+        String address = "";
+        String email = "";
 
         //PETITION VARIABLES
-        String submissionDate = "04/04/2025";
-        String status = "SUBMITTED";
-
-
-//        // IMMIGRANT VARIABLES
-//        String firstName = "";
-//        String lastName = "";
-//        String birthdate = "";
-//        String address = "";
-//        String email = "";
-//
-//        //PETITION VARIABLES
-//        int petitionID = -1;
-//        int petitionerID = -1;
-//        String submissionDate = "";
-//        String status = "";
+        int petitionID = -1;
+        int petitionerID = -1;
+        String submissionDate = "";
+        String status = "";
 
 
         //OBJECT CREATION (MIGHT NOT USE)
         Immigrant immigrant = new Immigrant(firstName, lastName, birthdate, address, email);
         Petition petition = new Petition(immigrant.getUserID(), submissionDate, status);
 
-        this.primaryStage = primaryStage;
         primaryStage.setTitle("Petition Review");
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
@@ -104,11 +90,10 @@ public class ReviewUI extends Application {
         //--------------------------------------------------------------------------------//
 
 
-        Label Spacer01 = new Label("");
-        grid.add(Spacer01, 0, 2, 2, 2);
+        Label spacer01 = new Label("");
+        grid.add(spacer01, 0, 2, 2, 2);
 
-        Label immigrantTitle = new Label("---- Immigrant (Petitioner) Information ----");
-        //immigrantTitle.setFont();
+        Label immigrantTitle = new Label("---- Immigrant Information ----");
         grid.add(immigrantTitle, 0, 3, 2, 2);
 
 
@@ -143,8 +128,8 @@ public class ReviewUI extends Application {
         //--------------------------------------------------------------------------------//
 
 
-        Label Spacer02 = new Label("");
-        grid.add(Spacer02, 0, 10, 2, 2);
+        Label spacer02 = new Label("");
+        grid.add(spacer02, 0, 10, 2, 2);
 
         Label petitionTitle = new Label("------------ Petition Information ------------");
         grid.add(petitionTitle, 0, 12, 2, 2);
@@ -169,14 +154,73 @@ public class ReviewUI extends Application {
         TextField statusAns = new TextField(petition.getStatus());
         grid.add(statusAns, 1, 17);
 
+        //--------------------------------------------------------------------------------//
+        //                                   SQL Calls                                    //
+        //--------------------------------------------------------------------------------//
+
+        String selectQuery = "SELECT * FROM petition "; //
+        DB_Connection db = new DB_Connection();
+        ResultSet rs;
+        try (Connection conn = db.getConnection();
+             Statement stmt = conn.createStatement();) {
+
+            rs = stmt.executeQuery(selectQuery);
+            if (rs.next()) {
+
+                // Petition
+                petitionID = rs.getInt("petition_id");
+                petitionerID = rs.getInt("userID");
+                submissionDate = rs.getString("submitted_at");
+                status = rs.getString("status");
+
+                petitionIDAns.setText(String.valueOf(petitionID));
+                petitionerIDAns.setText(String.valueOf(petitionerID));
+                statusAns.setText(status);
+                submissionDateAns.setText(submissionDate);
+
+                petition.setPetitionID(petitionID);
+                petition.setPetitionerID(petitionerID);
+                petition.setStatus(status);
+                petition.setSubmissionDate(submissionDate);
+            }
+
+            // Immigrant
+            String selectQueryImm = "SELECT * FROM immigrant WHERE userID = '" + petitionerID + "'";
+            Statement stmtImm = conn.createStatement();
+            ResultSet rsImm = stmt.executeQuery(selectQueryImm);
+
+            if (rsImm.next()) {
+
+                firstName = rsImm.getString("first_name");
+                lastName = rsImm.getString("last_name");
+                birthdate = rsImm.getString("birthdate");
+                address = rsImm.getString("address");
+                email = rsImm.getString("email");
+
+                immigrantFirstName.setText(firstName);
+                immigrantLastName.setText(lastName);
+                immigrantBD.setText(birthdate);
+                immigrantAddress.setText(address);
+                immigrantEmail.setText(email);
+
+                immigrant.setName(firstName, lastName);
+                immigrant.setBirthdate(birthdate);
+                immigrant.setAddress(address);
+                immigrant.setEmail(email);
+            }
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
         //--------------------------------------------------------------------------------//
         //                                    Buttons                                     //
         //--------------------------------------------------------------------------------//
 
 
-        Label Spacer03 = new Label("");
-        grid.add(Spacer03, 0, 18, 2, 2);
+        Label spacer03 = new Label("");
+        grid.add(spacer03, 0, 18, 2, 2);
 
         // SPACING
         Label modCountLab = new Label("");
@@ -243,8 +287,33 @@ public class ReviewUI extends Application {
 
 
         // FETCH BUTTON
-        Button fetchButton = new Button("another");
-        fetchButton.setOnAction(e -> {
+        Button fetchButton = new Button("reviewed");
+        fetchButton.setOnAction(ev -> {
+
+            String updateQuery = "UPDATE petition SET userID = ?, status = ?, submitted_at = ? WHERE petition_id = ?";
+            try (Connection conn = db.getConnection();
+                 PreparedStatement stmt = conn.prepareStatement(updateQuery)) {
+
+                stmt.setInt(1, petition.getPetitionerID());
+                stmt.setString(2, "APPROVAL");
+                stmt.setDate(3, Date.valueOf(petition.getSubmissionDate()));
+                stmt.executeUpdate();
+
+                String updateQueryImm = "UPDATE immigrant first_name = ?, last_name = ?, birthdate = ?, address = ?, " +
+                        "email = ? WHERE userID = '" + petition.getPetitionerID() + "'";
+                PreparedStatement stmtImm = conn.prepareStatement(updateQueryImm);
+
+                stmtImm.setString(1, immigrant.getFirst_name());
+                stmtImm.setString(2, immigrant.getLast_name());
+                stmtImm.setDate(3, Date.valueOf(immigrant.getBirthdate()));
+                stmtImm.setString(4, immigrant.getAddress());
+                stmtImm.setString(5, immigrant.getAddress());
+
+                stmtImm.executeUpdate();
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
 
         });
         grid.add(fetchButton, 2, 20);
