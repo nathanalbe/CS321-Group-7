@@ -61,17 +61,7 @@ public class Immigrant {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return userID;  // placeholder for TDD
-    }
-
-    // Update an immigrant's information
-    public boolean updateImmigrant(String address, String email) {
-        return false;  // placeholder
-    }
-
-    // Get immigrant object (simulate retrieval by userID)
-    public Immigrant getImmigrantByID(int userID) {
-        return null;  // placeholder
+        return userID;
     }
 
     //--------------------------------------------------------------------------------//
