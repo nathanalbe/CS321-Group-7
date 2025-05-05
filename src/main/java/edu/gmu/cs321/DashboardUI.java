@@ -6,7 +6,9 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.sql.*;
@@ -31,6 +33,22 @@ public class DashboardUI extends Application {
         public String getStatus() {
             return status;
         }
+    }
+
+    public static class ImmigrantDependentRow {
+        private final String firstName, lastName, birthdate, relationship;
+    
+        public ImmigrantDependentRow(String firstName, String lastName, String birthdate, String relationship) {
+            this.firstName = firstName;
+            this.lastName = lastName;
+            this.birthdate = birthdate;
+            this.relationship = relationship;
+        }
+    
+        public String getFirstName() { return firstName; }
+        public String getLastName() { return lastName; }
+        public String getBirthdate() { return birthdate; }
+        public String getRelationship() { return relationship; }
     }
 
     @Override
@@ -99,6 +117,17 @@ public class DashboardUI extends Application {
             }
 
             table.setItems(data);
+            table.setRowFactory(tv -> {
+                TableRow<PetitionRecord> row = new TableRow<>();
+                row.setOnMouseClicked(event -> {
+                    if (event.getClickCount() == 2 && !row.isEmpty()) {
+                        PetitionRecord selected = row.getItem();
+                        showPetitionPopup(selected.getPetitionId());
+                    }
+                });
+                return row;
+            });
+
         } catch (Exception e) {
             e.printStackTrace();
             showAlert("Database Error", "Could not retrieve petition records.");
@@ -133,6 +162,59 @@ public class DashboardUI extends Application {
         Scene scene = new Scene(layout, 500, 400);
         primaryStage.setScene(scene);
         primaryStage.show();
+    }
+
+    private void showPetitionPopup(int petitionId) {
+        Stage popup = new Stage();
+        popup.initOwner(primaryStage);
+        popup.initModality(Modality.APPLICATION_MODAL);
+        popup.setTitle("Petition Details – ID " + petitionId);
+
+        GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
+        grid.setPadding(new Insets(15));
+
+        grid.add(new Label("Petition ID:"), 0, 0);
+        grid.add(new Label(String.valueOf(petitionId)), 1, 0);
+
+        grid.add(new Label("Dependents:"), 0, 1);
+
+        TableView<ImmigrantDependentRow> depTable = new TableView<>();
+        TableColumn<ImmigrantDependentRow, String> colF = new TableColumn<>("First Name");
+        colF.setCellValueFactory(new PropertyValueFactory<>("firstName"));
+        TableColumn<ImmigrantDependentRow, String> colL = new TableColumn<>("Last Name");
+        colL.setCellValueFactory(new PropertyValueFactory<>("lastName"));
+        TableColumn<ImmigrantDependentRow, String> colB = new TableColumn<>("Birthdate");
+        colB.setCellValueFactory(new PropertyValueFactory<>("birthdate"));
+        TableColumn<ImmigrantDependentRow, String> colR = new TableColumn<>("Relationship");
+        colR.setCellValueFactory(new PropertyValueFactory<>("relationship"));
+        depTable.getColumns().addAll(colF, colL, colB, colR);
+
+        ObservableList<ImmigrantDependentRow> deps = FXCollections.observableArrayList();
+        try (PreparedStatement ps = DB_Connection.getConnection().prepareStatement(
+                "SELECT first_name, last_name, birthdate, relationship FROM dependent WHERE petition_id = ?")) {
+            ps.setInt(1, petitionId);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                deps.add(new ImmigrantDependentRow(
+                    rs.getString("first_name"),
+                    rs.getString("last_name"),
+                    rs.getDate("birthdate").toString(),
+                    rs.getString("relationship")
+                ));
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        depTable.setItems(deps);
+        depTable.setPrefHeight(120);
+
+        grid.add(depTable, 1, 1);
+
+        Scene scene = new Scene(grid);
+        popup.setScene(scene);
+        popup.showAndWait();
     }
 
     private void showAlert(String title, String msg) {
