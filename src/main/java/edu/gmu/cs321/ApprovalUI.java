@@ -32,7 +32,7 @@ public class ApprovalUI extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        primaryStage.setTitle("Approval Role – Approval Queue");
+        primaryStage.setTitle("Approval Queue");
 
         // Build the TableView
         TableView<PetitionRow> table = new TableView<>();
