@@ -100,8 +100,25 @@ public class ApprovalUI extends Application {
 
         // Layout
         VBox root = new VBox(10, new Label("Approval Queue"), table);
-        root.setAlignment(Pos.CENTER);
+        root.setAlignment(Pos.TOP_CENTER);
         root.setPadding(new Insets(10));
+        VBox.setVgrow(table, Priority.ALWAYS);
+
+        // Sign Out button
+        Button signOutButton = new Button("Sign Out");
+        signOutButton.setOnAction(e -> {
+            Session.clearSession();
+            try {
+                new NavigationUI().start(primaryStage);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        });
+        HBox bottomBar = new HBox(signOutButton);
+        bottomBar.setAlignment(Pos.CENTER_RIGHT);
+        bottomBar.setPadding(new Insets(5, 0, 0, 0));
+        root.getChildren().add(bottomBar);
+
         primaryStage.setScene(new Scene(root, 700, 450));
         primaryStage.show();
     }
