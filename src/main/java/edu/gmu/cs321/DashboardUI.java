@@ -41,7 +41,11 @@ public class DashboardUI extends Application {
         Immigrant currentImmigrant = Session.getCurrentImmigrant();
         if (currentImmigrant == null) {
             showAlert("Session Error", "No user logged in.");
-            new NavigationUI().start(primaryStage);
+            try {
+                new NavigationUI().start(primaryStage);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
             return;
         }
 
@@ -67,7 +71,31 @@ public class DashboardUI extends Application {
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
-                data.add(new PetitionRecord(rs.getInt("petition_id"), rs.getString("status")));
+                int petitionId = rs.getInt("petition_id");
+                String currentStatus = rs.getString("status");
+
+                // Get the most recent status from workflow_records
+                String workflowStatus = null;
+                String wfQuery = "SELECT next_step FROM workflow_db.workflow_records WHERE form_id = ? ORDER BY created_at DESC LIMIT 1";
+                try (PreparedStatement wfStmt = conn.prepareStatement(wfQuery)) {
+                    wfStmt.setInt(1, petitionId);
+                    ResultSet wfRs = wfStmt.executeQuery();
+                    if (wfRs.next()) {
+                        workflowStatus = wfRs.getString("next_step");
+                    }
+                }
+
+                // Update petition status if needed
+                if (workflowStatus != null && !workflowStatus.equalsIgnoreCase(currentStatus)) {
+                    String updateQuery = "UPDATE petition SET status = ? WHERE petition_id = ?";
+                    try (PreparedStatement updateStmt = conn.prepareStatement(updateQuery)) {
+                        updateStmt.setString(1, workflowStatus);
+                        updateStmt.setInt(2, petitionId);
+                        updateStmt.executeUpdate();
+                    }
+                }
+
+                data.add(new PetitionRecord(petitionId, workflowStatus != null ? workflowStatus : currentStatus));
             }
 
             table.setItems(data);
