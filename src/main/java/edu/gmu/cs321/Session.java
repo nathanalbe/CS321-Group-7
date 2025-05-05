@@ -10,4 +10,8 @@ public class Session {
     public static Immigrant getCurrentImmigrant() {
         return currentImmigrant;
     }
+
+    public static void clearSession() {
+        currentImmigrant = null;
+    }
 }

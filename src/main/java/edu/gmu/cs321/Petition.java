@@ -16,6 +16,12 @@ public class Petition {
         this.status = status;
     }
 
+    // Constructor for loading existing petitions (e.g., from DB)
+    public Petition(int petitionID, String status) {
+        this.petitionID = petitionID;
+        this.status = status;
+    }
+
     // function to create a new petition in the database
     // Returns the petitionID of the newly created petition, or 0 if creation failed  
     public int createPetition() {

@@ -75,7 +75,7 @@ public class LoginUI {
                         immigrant.setUserID(rs.getInt("userID"));
                         Session.setCurrentImmigrant(immigrant);
         
-                        new PetitionUI().start(stage);
+                        new DashboardUI().start(stage);
                     }
                 }
             } else {
